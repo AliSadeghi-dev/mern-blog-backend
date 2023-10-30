@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const dbConnect = require("./config/db/dbConnect");
 const userRoutes = require("./routes/users/usersRoute");
-const errorHandler = require("./middlewares/error/errorHandler");
+const { errorHandler, notFound } = require("./middlewares/error/errorHandler");
 
 dotenv.config();
 
@@ -15,6 +15,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 
 //error Handler
+app.use(notFound); 
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
