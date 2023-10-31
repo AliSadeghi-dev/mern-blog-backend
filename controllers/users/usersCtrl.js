@@ -112,6 +112,25 @@ const updateUserCtrl = expressAsyncHandler(async (req, res) => {
   }
 });
 
+//Update password
+const updatePasswordCtrl = expressAsyncHandler(async (req, res) => {
+  console.log("ali");
+  //destructure the login user
+  const { _id } = req.user;
+  const { password } = req.body;
+  console.log("password: " + password);
+  validateMongoDbId(_id);
+  //Find user by _id
+  const user = await User.findById(_id);
+  console.log("user: " + user);
+  if (password) {
+    user.password = password;
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  }
+  res.json(user);
+});
+
 module.exports = {
   userRegisterCtrl,
   loginUserController,
@@ -120,4 +139,5 @@ module.exports = {
   fetchUserCtrl,
   userProfileCtrl,
   updateUserCtrl,
+  updatePasswordCtrl,
 };
