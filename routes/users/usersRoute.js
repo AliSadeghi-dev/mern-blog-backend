@@ -10,6 +10,8 @@ const {
   updatePasswordCtrl,
   followingUserCtrl,
   unFollowUserCtrl,
+  blockUserCtrl,
+  unBlockUserCtrl,
 } = require("../../controllers/users/usersCtrl");
 const authMiddleware = require("../../middlewares/auth/authMiddleware");
 
@@ -25,5 +27,7 @@ userRoutes.put("/:id", authMiddleware, updateUserCtrl);
 userRoutes.put("/password/:id", authMiddleware, updatePasswordCtrl);
 userRoutes.delete("/:id", deleteUserCtrl);
 userRoutes.get("/:id", fetchUserCtrl);
+userRoutes.put("/block-user/:id", authMiddleware, blockUserCtrl);
+userRoutes.put("/unblock-user/:id", authMiddleware, unBlockUserCtrl);
 
 module.exports = userRoutes;

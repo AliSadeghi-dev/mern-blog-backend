@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    isBlog: {
+    isBlocked: {
       type: Boolean,
       default: false,
     },
