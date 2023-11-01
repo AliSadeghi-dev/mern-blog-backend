@@ -131,6 +131,83 @@ const updatePasswordCtrl = expressAsyncHandler(async (req, res) => {
   res.json(user);
 });
 
+//Following
+const followingUserCtrl = expressAsyncHandler(async (req, res) => {
+  const { followId } = req.body;
+  const loginUserId = req.user._id;
+  validateMongoDbId(followId);
+  //Find the target user and check if the login userId exists
+  const targetUser = await User.findById(followId);
+
+  const alreadyFollowing = targetUser?.followers?.find(
+    (user) => user?.toString() === loginUserId.toString()
+  );
+  if (alreadyFollowing) {
+    throw new Error("You have already followed this user.");
+  }
+
+  //1-Find the User you want to follow and update its followers field
+  await User.findByIdAndUpdate(
+    followId,
+    {
+      $push: {
+        followers: loginUserId,
+      },
+      isFollowing: true,
+    },
+    {
+      new: true,
+    }
+  );
+
+  //2-update the login user following filed
+  await User.findByIdAndUpdate(
+    loginUserId,
+    {
+      $push: {
+        following: followId,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  res.json("You have successfully follow this user.");
+});
+
+//UnFollow
+const unFollowUserCtrl = expressAsyncHandler(async (req, res) => {
+  const { unFollowId } = req.body;
+  const loginUserId = req.user._id;
+  validateMongoDbId(unFollowId);
+
+  await User.findByIdAndUpdate(
+    unFollowId,
+    {
+      $pull: {
+        followers: loginUserId,
+      },
+      isFollowing: false,
+    },
+    {
+      new: true,
+    }
+  );
+
+  await User.findByIdAndUpdate(
+    loginUserId,
+    {
+      $pull: {
+        following: unFollowId,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  res.json("You have successfully unfollow this user");
+});
+
 module.exports = {
   userRegisterCtrl,
   loginUserController,
@@ -140,4 +217,6 @@ module.exports = {
   userProfileCtrl,
   updateUserCtrl,
   updatePasswordCtrl,
+  followingUserCtrl,
+  unFollowUserCtrl,
 };
