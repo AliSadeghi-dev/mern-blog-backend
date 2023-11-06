@@ -71,8 +71,43 @@ const fetchPostCtrl = expressAsyncHandler(async (req, res) => {
   }
 });
 
+//update post
+
+const updatePostCtrl = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findByIdAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+        user: req.user?._id,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(post);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+//delete post
+
+const removePostCtrl = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedPost = await Post.findByIdAndRemove(id);
+    res.json(deletedPost);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 module.exports = {
   createPostCtrl,
   fetchAllPosts,
   fetchPostCtrl,
+  updatePostCtrl,
+  removePostCtrl,
 };
