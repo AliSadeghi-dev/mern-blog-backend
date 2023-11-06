@@ -44,8 +44,20 @@ const createPostCtrl = expressAsyncHandler(async (req, res) => {
 //fetch All
 const fetchAllPosts = expressAsyncHandler(async (req, res) => {
   try {
-    const posts = await Post.find().populate('user');
+    const posts = await Post.find().populate("user");
     res.json(posts);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+//fetch single post
+
+const fetchPostCtrl = expressAsyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findById({ _id: id });
+    res.json(post);
   } catch (error) {
     res.json(error);
   }
@@ -54,4 +66,5 @@ const fetchAllPosts = expressAsyncHandler(async (req, res) => {
 module.exports = {
   createPostCtrl,
   fetchAllPosts,
+  fetchPostCtrl,
 };

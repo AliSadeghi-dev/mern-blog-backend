@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   createPostCtrl,
   fetchAllPosts,
+  fetchPostCtrl
 } = require("../../controllers/posts/postCtrl");
 const authMiddleware = require("../../middlewares/auth/authMiddleware");
 const {
@@ -12,6 +13,7 @@ const {
 const postRoutes = Router();
 
 postRoutes.get("/", authMiddleware, fetchAllPosts);
+postRoutes.get("/:id", authMiddleware, fetchPostCtrl);
 postRoutes.post(
   "/",
   authMiddleware,
