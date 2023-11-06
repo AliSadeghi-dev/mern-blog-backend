@@ -1,5 +1,8 @@
 const { Router } = require("express");
-const { createPostCtrl } = require("../../controllers/posts/postCtrl");
+const {
+  createPostCtrl,
+  fetchAllPosts,
+} = require("../../controllers/posts/postCtrl");
 const authMiddleware = require("../../middlewares/auth/authMiddleware");
 const {
   PhotoUploadMulter,
@@ -8,6 +11,7 @@ const {
 
 const postRoutes = Router();
 
+postRoutes.get("/", authMiddleware, fetchAllPosts);
 postRoutes.post(
   "/",
   authMiddleware,

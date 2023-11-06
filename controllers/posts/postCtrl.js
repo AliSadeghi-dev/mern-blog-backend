@@ -7,6 +7,7 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 const User = require("../../model/user/User");
 const cloudinaryUploadImage = require("../../utils/cloudinary");
 
+//create post
 const createPostCtrl = expressAsyncHandler(async (req, res) => {
   const { _id } = req.user;
   //Check for bad words
@@ -40,6 +41,17 @@ const createPostCtrl = expressAsyncHandler(async (req, res) => {
   }
 });
 
+//fetch All
+const fetchAllPosts = expressAsyncHandler(async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.json(posts);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 module.exports = {
   createPostCtrl,
+  fetchAllPosts,
 };
