@@ -4,8 +4,9 @@ const sgMail = require("@sendgrid/mail");
 const User = require("../../model/user/User");
 const generateToken = require("../../config/token/generateToken");
 const validateMongoDbId = require("../../utils/validateMongodbId");
+const cloudinaryUploadImage = require("../../utils/cloudinary");
 
-sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //Register User
 const userRegisterCtrl = expressAsyncHandler(async (req, res) => {
@@ -253,10 +254,33 @@ const generateVerificationCode = expressAsyncHandler(async (req, res) => {
       text: "Hello baby !!!",
     };
     await sgMail.send(msg);
+    console.log(email);
+
     res.json(`Email sent successfully`);
   } catch (error) {
     res.json(error);
   }
+});
+
+//profile photo upload
+
+const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
+  ////find the login user
+  const { _id } = req.user;
+  //1. get the path to the image
+  const localPath = `public/images/profile/${req.file.filename}`;
+  //upload to cloudinary
+  const imgUpload = await cloudinaryUploadImage(localPath);
+  const foundUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      profilePhoto: imgUpload?.url,
+    },
+    {
+      new: true,
+    }
+  );
+  res.json(foundUser);
 });
 
 module.exports = {
@@ -273,4 +297,5 @@ module.exports = {
   blockUserCtrl,
   unBlockUserCtrl,
   generateVerificationCode,
+  profilePhotoUpload,
 };
