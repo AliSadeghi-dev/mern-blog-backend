@@ -97,7 +97,7 @@ const updatePostCtrl = expressAsyncHandler(async (req, res) => {
 const removePostCtrl = expressAsyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedPost = await Post.findByIdAndRemove(id);
+    const deletedPost = await Post.findByIdAndDelete(id);
     res.json(deletedPost);
   } catch (error) {
     res.json(error);
