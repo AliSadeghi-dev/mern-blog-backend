@@ -21,7 +21,7 @@ const multerFilter = (req, file, cb) => {
   }
 };
 
-const profilePhotoUploadMulter = multer({
+const PhotoUploadMulter = multer({
   storage: multerStorage,
   filter: multerFilter,
   limits: {
@@ -45,4 +45,4 @@ const profilePhotoResize = async (req, res, next) => {
   next();
 };
 
-module.exports = { profilePhotoUploadMulter, profilePhotoResize };
+module.exports = { PhotoUploadMulter, profilePhotoResize };
