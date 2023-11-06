@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const Filter = require("bad-words");
+const fs = require("fs");
 
 const Post = require("../../model/post/Post");
 const validateMongoDbId = require("../../utils/validateMongodbId");
@@ -32,6 +33,8 @@ const createPostCtrl = expressAsyncHandler(async (req, res) => {
       user: _id,
     });
     res.json(post);
+    //remove uploaded image
+    fs.unlinkSync(localPath);
   } catch (error) {
     res.json(error);
   }

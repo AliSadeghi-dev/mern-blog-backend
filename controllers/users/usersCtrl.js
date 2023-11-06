@@ -1,5 +1,6 @@
 const expressAsyncHandler = require("express-async-handler");
 const sgMail = require("@sendgrid/mail");
+const fs = require("fs");
 
 const User = require("../../model/user/User");
 const generateToken = require("../../config/token/generateToken");
@@ -281,6 +282,7 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
     }
   );
   res.json(foundUser);
+  fs.unlinkSync(localPath);
 });
 
 module.exports = {
