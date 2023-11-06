@@ -52,11 +52,19 @@ const fetchAllPosts = expressAsyncHandler(async (req, res) => {
 });
 
 //fetch single post
-
 const fetchPostCtrl = expressAsyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await Post.findById({ _id: id });
+    const post = await Post.findById({ _id: id }).populate("user");
+    await Post.findByIdAndUpdate(
+      id,
+      {
+        $inc: { numViews: 1 },
+      },
+      {
+        new: true,
+      }
+    );
     res.json(post);
   } catch (error) {
     res.json(error);
