@@ -5,6 +5,7 @@ const userRoutes = require("./routes/users/usersRoute");
 const { errorHandler, notFound } = require("./middlewares/error/errorHandler");
 const postRoutes = require("./routes/posts/postRoute");
 const commentRoutes = require("./routes/comments/commentRoute");
+const categoryRoutes = require("./routes/category/categoryRoutes");
 
 const app = express();
 //DB
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/category",categoryRoutes)
 
 //error Handler
 app.use(notFound);
