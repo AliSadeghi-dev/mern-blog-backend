@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
+const cors = require("cors");
 const dbConnect = require("./config/db/dbConnect");
 const userRoutes = require("./routes/users/usersRoute");
 const { errorHandler, notFound } = require("./middlewares/error/errorHandler");
@@ -11,12 +12,14 @@ const app = express();
 //DB
 dbConnect();
 app.use(express.json());
+//cors
+app.use(cors());
 
 //routes
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
-app.use("/api/category",categoryRoutes)
+app.use("/api/category", categoryRoutes);
 
 //error Handler
 app.use(notFound);
